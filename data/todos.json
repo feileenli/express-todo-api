@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "task": "test api on postman",
+        "completed": true
+      },
+      {
+        "id": 2,
+        "task": "go to psyc100 class",
+        "completed": true
+      },
+      {
+        "id": 4,
+        "task": "make dinner",
+        "completed": false
+      },
+      {
+        "id": 4,
+        "task": "plan galentines",
+        "completed": false
+      }
+
+]
