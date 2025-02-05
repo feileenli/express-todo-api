@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const {todos, saveTodos} = require('../data/todo');
+const {todos, saveTodos, exportToCsv} = require('../data/todo');
 
 //get all todos
 router.get('/', (req, res) => {
     res.status(200).json(todos);
 }); 
+
+router.get('/export', (req, res) => {
+    exportToCsv(todos);
+    res.status(200).json({message: "Todos exported to todos.csv"});
+});
 
 //get a todo
 router.get('/:id', (req, res) => {

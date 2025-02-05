@@ -1,5 +1,11 @@
 const fs = require('fs');
 const filePath = './data/todos.json';
+const fastcsv = require('fast-csv');
+
+const exportToCsv = (todos) => {
+    const ws = fs.createWriteStream('./data/todos.csv');
+    fastcsv.write(todos, {headers:true}).pipe(ws);
+}
 
 //this returns an object 
 const loadTodos = () => {
@@ -18,4 +24,4 @@ const saveTodos = (todos) => {
 
 //todos is an obj
 let todos = loadTodos();
-module.exports = {todos, saveTodos}
+module.exports = {todos, saveTodos, exportToCsv}
