@@ -12,7 +12,6 @@ router.get('/tasks', verifyToken, async (req, res) => {
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-    // res.status(200).json(todo);
 }); 
 
 //get all completed todos
@@ -23,7 +22,6 @@ router.get('/tasks/completed', verifyToken, async (req, res) => {
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-    // res.status(200).json(todo);
 }); 
 
 
@@ -32,23 +30,9 @@ router.get('/export', (req, res) => {
     res.status(200).json({message: "Todos exported to todos.csv"});
 });
 
-//get a todo
-// router.get('/:id', (req, res) => {
-//     const todo = todos.find(t => t.id === parseInt(req.params.id));
-//     res.status(200).json(todo);
-// });
 
 //add a todo 
 router.post('/tasks', verifyToken, async(req, res) => {
-    // const newTodo = {
-    //     id: todos.length + 1, 
-    //     task: req.body.task, 
-    //     completed: false
-    // };
-
-    // todos.push(newTodo);
-    // saveTodos(todos);
-    // res.status(201).json(newTodo);
     const {task, priority, dueDate} = req.body;
 
     if(!task) {
@@ -76,14 +60,6 @@ router.post('/tasks', verifyToken, async(req, res) => {
 
 //mark a specific todo as completed or update the body 
 router.put('/:id', async (req, res) => {
-    // const todo = todos.find(t => t.id === parseInt(req.params.id)); 
-
-    // if(!todo) return res.status(404).json({message: "To Do Item Not Found"});
-    // todo.task = req.body.task || todo.task;
-
-    // todo.completed = req.body.completed !== undefined ? req.body.completed : todo.completed; 
-    // saveTodos(todos)
-    // res.status(200).json(todo);
     try {
         const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body,{new: true});
         if(!updatedTodo) {
@@ -97,13 +73,6 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    // const index = todos.findIndex(t => t.id === parseInt(req.params.id)); 
-
-    // if(index === -1) return res.status(404).json({message: "To Do Item Not Found"}); 
-
-    // todos.splice(index, 1);
-    // saveTodos(todos);
-    // res.status(200).json("To Do Item Deleted");
     try {
         const deletedTodo = await Todo.findByIdAndDelete(req.params.id);
         if(!deletedTodo) {
