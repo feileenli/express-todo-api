@@ -2,10 +2,26 @@ const mongoose = require('mongoose');
 const {Schema } = mongoose;
 
 const todoSchema = new Schema({
-    task: {type: String, required: true},
-    completed: {type: Boolean, default: false},
+    userId: {
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true
+    },
+    task: {
+        type: String, 
+        required: true
+    },
+    priority: {
+        type: String, 
+        enum: ['low', 'medium', 'high'],
+        default: 'low'
+    },
+    completed: {
+        type: Boolean, 
+        default: false
+    },
     dueDate: Date
-});
+}, {timestamps: true});
 
 //Todo is the name for the model, a collection will be created with a name 'Todos'
 const Todo = mongoose.model('Todo', todoSchema); 

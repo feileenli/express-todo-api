@@ -2,17 +2,30 @@ const express = require('express');
 const router = express.Router();
 const {todos, saveTodos, exportToCsv} = require('../data/todo');
 const Todo = require('../models/todoModel');
+const verifyToken = require('../middleware/auth.js');
 
 //get all todos
-router.get('/', async (req, res) => {
+router.get('/tasks', verifyToken, async (req, res) => {
     try {
-        const allTodos = await Todo.find();
+        const allTodos = await Todo.find({userId: req.user.id});
         res.status(200).json(allTodos);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
     // res.status(200).json(todo);
 }); 
+
+//get all completed todos
+router.get('/tasks/completed', verifyToken, async (req, res) => {
+    try {
+        const allTodos = await Todo.find({userId: req.user.id, completed: true});
+        res.status(200).json(allTodos);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+    // res.status(200).json(todo);
+}); 
+
 
 router.get('/export', (req, res) => {
     exportToCsv(todos);
@@ -26,7 +39,7 @@ router.get('/export', (req, res) => {
 // });
 
 //add a todo 
-router.post('/', async(req, res) => {
+router.post('/tasks', verifyToken, async(req, res) => {
     // const newTodo = {
     //     id: todos.length + 1, 
     //     task: req.body.task, 
@@ -36,7 +49,8 @@ router.post('/', async(req, res) => {
     // todos.push(newTodo);
     // saveTodos(todos);
     // res.status(201).json(newTodo);
-    const {task, dueDate} = req.body;
+    const {task, priority, dueDate} = req.body;
+
     if(!task) {
         return res.status(400).json({message: "task is required"});
     }
@@ -44,10 +58,11 @@ router.post('/', async(req, res) => {
     if(dueDate && isNaN(Date.parse(dueDate))) {
         return res.status(400).json({message: "invalid due date format. use YYYY-MM-DD or ISO 8601 format."})
     }
-
     try {
         const newTodo = new Todo({
+            userId: req.userId,
             task,
+            priority,
             completed: false,
             dueDate: dueDate ? new Date(dueDate) : null
         });
@@ -59,7 +74,7 @@ router.post('/', async(req, res) => {
 }
 );
 
-//mark a todo as completed or update the body 
+//mark a specific todo as completed or update the body 
 router.put('/:id', async (req, res) => {
     // const todo = todos.find(t => t.id === parseInt(req.params.id)); 
 
@@ -100,9 +115,9 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', verifyToken, async (req, res) => {
     try {
-        const result = await Todo.deleteMany({}); 
+        const result = await Todo.deleteMany({userId: req.user.id}); 
         res.status(200).json(`Deleted ${result.deletedCount} To-Do items`); 
     } catch (e) {
         res.status(500).json(e.message);
