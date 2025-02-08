@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 //import route modules
 const todoRoutes = require('./routes/todoRoutes');
@@ -12,21 +13,8 @@ const port = 3000;
 
 const app = express();
 
-//add todo each time server starts and there are zero tasks 
-// const addInitialTodo = async () => {
-//     const count = await Todo.countDocuments(); 
-
-//     if(count === 0) {
-//         const defaultTodo = new Todo({
-//             task: "Welcome to the To-Do List! Check this as completed!", 
-//             completed: false
-//         });
-//         await defaultTodo.save();
-//         console.log("Default To-Do added to MongoDB: ", defaultTodo);
-//     }
-// }
-
 app.use(express.json());
+app.use(cors());
 
 //mount the router at /todos 
 app.use('/api', todoRoutes); 

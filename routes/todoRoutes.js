@@ -7,7 +7,7 @@ const verifyToken = require('../middleware/auth.js');
 //get all todos
 router.get('/tasks', verifyToken, async (req, res) => {
     try {
-        const allTodos = await Todo.find({userId: req.user.id});
+        const allTodos = await Todo.find({userId: req.userId});
         res.status(200).json(allTodos);
     } catch (e) {
         res.status(500).json({message: e.message});
