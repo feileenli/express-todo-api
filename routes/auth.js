@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.get('/users', async (req, res) => {
     try {
-        const users = await User.find({});
-        res.status(200).json({message: "These are all the users!"});
+        const users = awaitUser.find({});
+        res.status(200).json({users});
     } catch(e) {
         res.status(500).json({error: "Server error"});
     };
@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
     try {
         const user = await User.findOne({username})
         if(user) {
-            res.status(400).json({error: 'user already exists'}); 
+            return res.status(400).json({error: 'user already exists'}); 
         }
         const hashedPwd = await bcrypt.hash(password, 10);
         
@@ -30,11 +30,8 @@ router.post('/signup', async (req, res) => {
             username, 
             password: hashedPwd
         }); 
-
         await newUser.save();
-
         res.status(201).json({message: 'User registered successfully'}); 
-
     } catch(e) {
         res.status(500).json({error: 'Server error'}); 
     }

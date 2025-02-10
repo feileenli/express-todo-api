@@ -48,11 +48,12 @@ router.post('/tasks', verifyToken, async(req, res) => {
             task,
             priority,
             completed: false,
-            dueDate: dueDate ? new Date(dueDate) : null
+            dueDate: dueDate 
         });
         await newTodo.save();
         res.status(201).json(newTodo); 
     } catch(e) {
+        console.log("error while creating the new todo:", e)
         res.status(500).json({message: e.message})
     };
 }

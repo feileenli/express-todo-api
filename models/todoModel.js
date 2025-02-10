@@ -13,8 +13,8 @@ const todoSchema = new Schema({
     },
     priority: {
         type: String, 
-        enum: ['low', 'medium', 'high'],
-        default: 'low'
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Low'
     },
     completed: {
         type: Boolean, 
